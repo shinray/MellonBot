@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.json.simple.JSONArray;
@@ -13,10 +15,13 @@ import org.json.simple.parser.ParseException;
 
 public class Test {
 	
-	public static String name = "allenmelon";
+	public static String name = "xaghant";
 	public static String baseURL = "https://api.twitch.tv/kraken/";
+	public static ArrayList<String> followers;
+	public static HashMap<String, Integer> fc;
 	
 	public static void main(String[] args) {
+		getMostPopularFollower(name);
 		Chat chat = new Chat("mellonbot", name);
 		try {
 			chat.connect();
@@ -29,25 +34,26 @@ public class Test {
 	
 	public static void getMostPopularFollower(String name) {
 		try {
-			ArrayList<String> followers = buildFollowerList(name);
-			String most = followers.get(0);
-			long m = 0;
-			long i = 0;
+			fc = new HashMap<String, Integer>();
+			followers = buildFollowerList(name);
+			int i = 0;
 			for (String s : followers) {
 				System.out.println(i);
 				i++;
 				try {
 					long c = getFollowerCount(s);
-					if (c > m) {
-						m = c;
-						most = s;
-					}
+					fc.put(s, (int) c);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("Most popular follower is "+most+" with "+m+" followers.");
-			
+			followers.sort(new Comparator<String>() {
+				public int compare(String arg0, String arg1) {
+					if (fc.get(arg0) < fc.get(arg1)) return 1;
+					if (fc.get(arg0) > fc.get(arg1)) return -1;
+					return 0;
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
