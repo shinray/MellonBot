@@ -13,18 +13,22 @@ import org.json.simple.parser.ParseException;
 
 public class Test {
 	
-	public static String name = "xaghant";
+	public static String name = "allenmelon";
 	public static String baseURL = "https://api.twitch.tv/kraken/";
 	
 	public static void main(String[] args) {
+		Chat chat = new Chat("mellonbot", name);
 		try {
-			/*Scanner scan = new Scanner(new URL(baseURL+"channels/"+name+"/follows").openStream());
-			System.out.println(scan.nextLine());
-			scan.close();
-			scan = new Scanner(new URL("https://api.twitch.tv/kraken/channels/allenmelon/follows?limit=1").openStream());
-			System.out.println(scan.nextLine());
-			scan.close();
-			*/
+			chat.connect();
+			chat.run();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("finishing");
+	}
+	
+	public static void getMostPopularFollower(String name) {
+		try {
 			ArrayList<String> followers = buildFollowerList(name);
 			String most = followers.get(0);
 			long m = 0;
@@ -33,9 +37,7 @@ public class Test {
 				System.out.println(i);
 				i++;
 				try {
-					JSONObject f = getData(baseURL+"channels/"+s);
-					long c = (long)f.get("followers");
-					//long c = getFollowerCount(s);
+					long c = getFollowerCount(s);
 					if (c > m) {
 						m = c;
 						most = s;
@@ -46,7 +48,6 @@ public class Test {
 			}
 			System.out.println("Most popular follower is "+most+" with "+m+" followers.");
 			
-			//JSONObject j = getData(baseURL+"channels/"+name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,8 +68,6 @@ public class Test {
 	
 	public static long getFollowerCount(String n) throws MalformedURLException, IOException {
 		Scanner scan = new Scanner(new URL(baseURL+"channels/"+n+"/").openStream());
-		//System.out.println(scan.nextLine());
-		//System.out.println(scan.findInLine("\"followers\":(\\d+)"));
 		long c = Long.parseLong(scan.findInLine("\"followers\":(\\d+)").substring(12));
 		scan.close();
 		return c;
