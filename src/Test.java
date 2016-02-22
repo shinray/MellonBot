@@ -21,7 +21,7 @@ public class Test {
 	public static HashMap<String, Integer> fc;
 	
 	public static void main(String[] args) {
-		getMostPopularFollower(name);
+		//getMostPopularFollower(name);
 		Chat chat = new Chat("mellonbot", name);
 		try {
 			chat.connect();
