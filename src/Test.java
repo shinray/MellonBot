@@ -16,13 +16,14 @@ import org.json.simple.parser.ParseException;
 public class Test {
 	
 	public static String name = "xaghant";
+	public static String botname = "mellonbot";
 	public static String baseURL = "https://api.twitch.tv/kraken/";
 	public static ArrayList<String> followers;
 	public static HashMap<String, Integer> fc;
 	
 	public static void main(String[] args) {
 		//getMostPopularFollower(name);
-		Chat chat = new Chat("mellonbot", name);
+		Chat chat = new Chat(botname, name);
 		try {
 			chat.connect();
 			chat.run();
